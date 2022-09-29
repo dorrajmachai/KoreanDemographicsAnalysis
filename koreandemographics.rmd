@@ -1,0 +1,132 @@
+---
+title: Korean Demographics Notebook
+date: 9-23-2022
+author: @dorrajmachai on GitHub
+---
+
+```{r}
+
+library("tidyverse")
+library("lubridate")
+library("ggthemes")
+```
+
+```{r}
+
+data <- read_csv("Korean_demographics_2000-2022.csv")
+
+head(data)
+glimpse(data)
+str(data)
+```
+
+```{r}
+
+head(data$Date, 25)
+
+data$Date <- lubridate::mdy(data$Date)
+str(data)
+```
+
+```{r}
+
+glimpse(data)
+sum(is.na(data$Date))
+```
+
+```{r}
+
+data %>%
+	ggplot(aes(x = Birth_rate, y = Death_rate)) +
+	geom_point(aes(color = Region)) +
+	scale_x_continuous(limits = c(0, 20)) +
+	scale_y_continuous(limits = c(0, 20))
+```
+
+```{r}
+
+data %>%
+	ggplot(aes(x = Marriage_rate, y = Divorce_rate)) +
+	geom_point(aes(color = Region)) +
+	scale_x_continuous(limits = c(0, 15)) +
+	scale_y_continuous(limits = c(0, 15))
+```
+
+```{r}
+
+data %>%
+	group_by(Region) %>%
+	ggplot(aes(x = Region, y = Divorce_rate, fill = data$Region)) +
+	geom_col(position = "dodge") +
+	scale_y_continuous(expand = c(0, 0)) +
+	theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+
+data %>%
+	group_by(Region) %>%
+	ggplot(aes(x = Region, y = Marriage_rate, fill = data$Region)) +
+	geom_col(position = "dodge") +
+	scale_y_continuous(expand = c(0, 0)) +
+	theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+
+data %>%
+	group_by(Region) %>%
+	ggplot(aes(x = Region, y = Birth_rate, fill = data$Region)) +
+	geom_col(position = "dodge") +
+	scale_y_continuous(expand = c(0, 0)) +
+	coord_flip()
+```
+
+```{r}
+
+data %>%
+	group_by(Region) %>%
+	ggplot(aes(x = Region, y = Death_rate, fill = data$Region)) +
+	geom_col(position = "dodge") +
+	scale_y_continuous(expand = c(0, 0)) +
+	coord_flip()
+```
+
+```{r}
+
+data %>%
+	ggplot(aes(x = Marriage_rate, y = Birth_rate)) +
+	geom_point(aes(color = Region)) +
+	scale_x_continuous(limits = c(0, 15)) +
+	scale_y_continuous(limits = c(0, 15))
+
+```
+
+```{r}
+
+data %>%
+	group_by(Region) %>%
+	summarize(mean(Death_rate), mean(Divorce_rate))
+```
+
+```{r}
+
+glimpse(data)
+
+data %>%
+	group_by(Region) %>%
+	ggplot(aes(x = Region, y = Natural_growth_rate)) +
+	geom_boxplot() +
+	theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+```{r}
+
+data %>%
+	group_by(Region) %>%
+	ggplot(aes(x = Region, y = Death, fill = Region)) +
+	geom_col() +
+	coord_flip()
+```
+
+
